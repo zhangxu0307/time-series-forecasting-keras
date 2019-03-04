@@ -1,9 +1,8 @@
 #encoding=utf-8
 
 import util
-import season_decompose
+from models import decompose
 import eval
-import numpy as np
 import matplotlib.pyplot as plt
 import naive_RNN_forecasting as RNNFORECAST
 import pandas as pd
@@ -16,7 +15,7 @@ ts, dataset = util.load_data_xls("./data/NN5/NN5.xlsx", indexName="date", column
 
 # 序列分解
 ts.index = pd.date_range(start='19960318',periods=len(ts), freq='Q')
-trend,seasonal,residual = season_decompose.seasonDecompose(ts)
+trend,seasonal,residual = decompose.seasonDecompose(ts)
 # print trend.shape
 # print seasonal.shape
 # print residual.shape

@@ -1,9 +1,8 @@
-import stateful_RNNs as staRNNs
+from deprecated import stateful_RNNs as staRNNs
 import util
 import eval
 from sklearn.preprocessing import MinMaxScaler
-import matplotlib.pyplot as plt
-import csv
+
 
 def statefulRNNforecasting(dataset,lookBack,inputDim = 1,hiddenNum = 100 ,outputDim = 1 ,unit = "GRU",epoch = 50,batchSize = 10,varFlag=False, minLen = 15, maxLen = 30,inputNum = 150):
 

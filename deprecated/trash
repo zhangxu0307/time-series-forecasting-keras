@@ -1,0 +1,71 @@
+    for i in range(3,4):
+        #tsName = "NN5-"+str(i).zfill(3)
+        #print(tsName)
+        #ts, data = util.load_data_xls("./data/NN5/NN5.xlsx", indexName="date", columnName=tsName)
+        #ts, data = util.load_data("./data/AEMO/NSW/nsw.csv", indexName="SETTLEMENTDATE", columnName="TOTALDEMAND")
+        #ts, data = util.load_data("./data/AEMO/NSW/TAS2016.csv", indexName="SETTLEMENTDATE", columnName="TOTALDEMAND")
+        ts, data = util.load_data("./data/bike/hour.csv", indexName="dteday", columnName="cnt")
+        #ts, data = util.load_data("./data/AEMO/TT30GEN.csv", indexName="TRADING_INTERVAL", columnName="VALUE")
+        trainPred,testPred, mae, mrse, smape = ANNforecasting(data, inputDim=lag, epoch=20)
+        #writer.writerow([tsName, str(mae), str(mrse), str(smape)])
+
+    # MAE = eval.calcMAE(trainY, trainPred)
+    # print ("train MAE",MAE)
+    # MRSE = eval.calcRMSE(trainY, trainPred)
+    # print ("train MRSE",MRSE)
+    # MAPE = eval.calcMAPE(trainY, trainPred)
+    # print ("train MAPE",MAPE)
+
+        csvfile = open('./result/result_ANN.csv', 'w', newline='')
+    writer = csv.writer(csvfile)
+    writer.writerow(["lag="+str(lag)])
+    writer.writerow(['tsName', 'MAE', 'MRSE', 'SMAPE'])
+    csvfile.close()
+
+
+    # 加载excel文件数据，选定时间轴和要预测的列名称
+def load_data_xls(filename, indexName, columnName):
+
+    df = pd.read_excel(filename, index_col=indexName)
+    df.index = pd.to_datetime(df.index)
+    df = df.fillna(method='pad')
+    ts = df[columnName]
+    data = pd.DataFrame(ts).values.reshape(-1)
+    return ts, data
+
+
+# 加载txt数据
+def load_data_txt(filename, indexName, columnName):
+
+    reader = pd.read_table(filename,header=0,index_col=indexName,delimiter=";", iterator=True)
+    df = reader.get_chunk(5000)
+    df.index = pd.to_datetime(df.index)
+    #df = df.fillna(method='pad')
+    ts = df[columnName]
+    data = pd.DataFrame(ts).values.reshape(-1)
+    return ts, data
+
+    # 变长度采样训练样本
+'''
+def createVariableDataset(dataset, minLen, maxLen,numInputs):
+    dataX = []
+    dataY = []
+    for i in range(numInputs):
+        start = np.random.randint(len(dataset)-minLen-1)
+        #end = np.random.randint(min(start+minLen, len(dataset)-1), min(start+maxLen, len(dataset)-1))
+        randomLen = np.random.randint(minLen, maxLen)
+        if start+randomLen > len(dataset)-2:
+            end = len(dataset)-2
+        else:
+            end = start+randomLen
+        sequence_in = dataset[start:end]
+        #sequence_in = pad_sequences(sequence_in, maxlen=maxLen, dtype='float32')
+        sequence_out = dataset[end + 1]
+        dataX.append(sequence_in)
+        dataY.append(sequence_out)
+    dataX = np.array(dataX)
+    dataY = np.array(dataY)
+    dataX = pad_sequences(dataX, maxlen=maxLen, dtype='float32') # 左端补齐
+    dataX = np.reshape(dataX, (dataX.shape[0], dataX.shape[1], 1)) # 转化为rnn输入形式
+    return dataX,dataY
+'''

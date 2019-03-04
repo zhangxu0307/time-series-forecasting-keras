@@ -1,4 +1,4 @@
-import RNNs
+from models import RNNs
 import numpy as np
 import util
 from sklearn.preprocessing import MinMaxScaler

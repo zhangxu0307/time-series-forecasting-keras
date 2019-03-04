@@ -1,9 +1,10 @@
 import sklearn as sk
 from sklearn.svm import SVR
 
+
 class SVRModel(object):
 
-    def __init__(self, C=1.0, kernel='rbf',epsilon=0.2, shrinking=True):
+    def __init__(self, C=1.0, kernel='rbf', epsilon=0.2, shrinking=True):
         self.C = C
         self.kernel = kernel
         self.shrinking = shrinking

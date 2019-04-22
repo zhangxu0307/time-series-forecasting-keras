@@ -88,17 +88,19 @@ if __name__ == "__main__":
 
     lag = 24
     batch_size = 32
-    epoch = 5
+    epoch = 20
     hidden_dim = 64
-    lr = 1e-3
+    lr = 1e-4
     unit = "GRU"
 
     # ts, data = util.load_data("./data/NSW2013.csv", columnName="TOTALDEMAND")
     # ts, data = util.load_data("./data/bike_hour.csv", columnName="cnt")
     # ts, data = util.load_data("./data/TAS2016.csv", columnName="TOTALDEMAND")
-    ts, data = util.load_data("./data/traffic_data_in_bits.csv", columnName="value")
+    # ts, data = util.load_data("./data/traffic_data_in_bits.csv", columnName="value")
     # ts, data = util.load_data("./data/beijing_pm25.csv", columnName="pm2.5")
     # ts, data = util.load_data("./data/pollution.csv", columnName="Ozone")
+    ts, data = util.load_data("./data/ali_cloud/m_1955_cpu.csv", columnName="cpu")
+
     trainPred, testPred, mae, mrse, smape = RNN_forecasting(data, lookBack=lag, epoch=epoch, batchSize=batch_size,
                                             varFlag=False, minLen=24, maxLen=48, step=8, unit=unit, lr=lr)
 

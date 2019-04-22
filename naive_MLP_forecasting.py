@@ -67,9 +67,9 @@ if __name__ == "__main__":
     # ts, data = util.load_data("./data/NSW2013.csv", columnName="TOTALDEMAND")
     # ts, data = util.load_data("./data/bike_hour.csv", columnName="cnt")
     # ts, data = util.load_data("./data/TAS2016.csv", columnName="TOTALDEMAND")
-    # ts, data = util.load_data("./data/traffic_data_in_bits.csv", columnName="value")
+    ts, data = util.load_data("./data/traffic_data_in_bits.csv", columnName="value")
     # ts, data = util.load_data("./data/beijing_pm25.csv", columnName="pm2.5")
-    ts, data = util.load_data("./data/pollution.csv", columnName="Ozone")
+    # ts, data = util.load_data("./data/pollution.csv", columnName="Ozone")
     trainPred, testPred, mae, mrse, smape = MLP_forecasting(data, inputDim=lag, hiddenNum=hidden_dim,
                                             lr=lr, epoch=epoch, batchSize=batch_size, plot_flag=True)
 

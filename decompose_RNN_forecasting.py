@@ -5,6 +5,7 @@ from models import decompose
 import eval
 from naive_RNN_forecasting import RNN_forecasting
 import time
+import matplotlib.pyplot as plt
 
 
 def decompose_RNN_forecasting(ts, dataset, freq, lag, epoch=20, hidden_num=64,
@@ -35,7 +36,7 @@ def decompose_RNN_forecasting(ts, dataset, freq, lag, epoch=20, hidden_num=64,
     print("resPred shape is", resPred.shape)
 
     # 获取最终预测结果
-    finalPred = trendPred+seasonal+resPred
+    # finalPred = trendPred+seasonal+resPred
 
     trainPred = trTrain+seasonal[trendWin:trendWin+trTrain.shape[0]]+resTrain
     testPred = trTest+seasonal[2*resWin+resTrain.shape[0]:]+resTest
@@ -55,33 +56,39 @@ def decompose_RNN_forecasting(ts, dataset, freq, lag, epoch=20, hidden_num=64,
     SMAPE = eval.calcSMAPE(testY, testPred)
     print("test SMAPE", SMAPE)
 
-    # plt.plot(data)
-    # plt.plot(finalPred)
-    # plt.show()
+    plt.plot(testY, label='ground-truth')
+    plt.plot(testPred, label='prediction')
+    plt.xlabel("Time", fontsize=10)
+    plt.ylabel("CPU Utilization(%)", fontsize=10)
+    plt.legend()
+    foo_fig = plt.gcf()
+    foo_fig.savefig('M_1955_CPU.eps', format='eps', dpi=1000, bbox_inches='tight')
+    plt.show()
 
     return trainPred, testPred, MAE, MRSE, SMAPE
 
 
 if __name__ == "__main__":
 
-    lag = 48  # if using varFlag, lag == maxLen
+    lag = 24  # if using varFlag, lag == maxLen
     batch_size = 32
-    epoch = 10
+    epoch = 12
     hidden_dim = 64
     unit = "GRU"
-    lr = 1e-3
-    freq = 4
+    lr = 1e-4
+    freq = 8
     varFlag = True
-    minLen = 24
-    maxLen = 48
-    step = 8
+    minLen = 12
+    maxLen = 24
+    step = 6
 
     # ts, data = util.load_data("./data/NSW2013.csv", columnName="TOTALDEMAND")
     # ts, data = util.load_data("./data/bike_hour.csv", columnName="cnt")
     # ts, data = util.load_data("./data/TAS2016.csv", columnName="TOTALDEMAND")
     # ts, data = util.load_data("./data/traffic_data_in_bits.csv", columnName="value")
     # ts, data = util.load_data("./data/beijing_pm25.csv", columnName="pm2.5")
-    ts, data = util.load_data("./data/pollution.csv", columnName="Ozone")
+    # ts, data = util.load_data("./data/pollution.csv", columnName="Ozone")
+    ts, data = util.load_data("./data/ali_cloud/m_1955_cpu.csv", columnName="cpu")
 
     trainPred, testPred, mae, mrse, smape = decompose_RNN_forecasting(ts, data, lag=lag, freq=freq, unit=unit,
                                                                      varFlag=varFlag, minLen=minLen, maxLen=maxLen,
